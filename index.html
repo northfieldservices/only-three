@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Only Three</title>
+<meta name="description" content="Write down what's on your mind, keep one list of everything to do, and pick only three to do now. Free, no sign-up.">
+<meta property="og:title" content="Only Three">
+<meta property="og:description" content="Every evening, pick the three things that matter tomorrow. Everything else can wait.">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="theme-color" content="#f6f1e7">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<style>
+  .page { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 600 18px var(--serif); color: var(--ink); text-decoration: none; }
+  .brand img { width: 30px; height: 30px; border-radius: 8px; }
+  .hero { display: grid; grid-template-columns: 1.3fr .7fr; gap: 48px; align-items: center; padding: 48px 0 72px; }
+  .hero h1 { font: 400 clamp(30px, 9.6vw, 66px)/1.04 var(--serif); letter-spacing: -.02em; margin: 0 0 18px; }
+  .hero h1 em { color: var(--accent); }
+  .hero p { font-size: 19px; color: var(--muted); max-width: 30em; margin: 0 0 28px; }
+  .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tiny { font-size: 14px; color: var(--muted); margin-top: 14px; }
+
+  /* phone mock */
+  .phone { justify-self: center; width: min(320px, 100%); aspect-ratio: 9 / 16.5; border-radius: 44px; padding: 12px;
+           background: #1b1916; box-shadow: 0 30px 80px rgba(40,30,15,.25), inset 0 0 0 2px #34302a; }
+  .screen { height: 100%; border-radius: 34px; background: #f6f1e7; color: #1f1b16; padding: 34px 16px 16px; overflow: hidden; display: flex; flex-direction: column; }
+  .screen h4 { font: 600 24px var(--serif); margin: 0; }
+  .screen .s { font-size: 12px; color: #6f665b; margin-bottom: 16px; }
+  .m-item { display: grid; grid-template-columns: 30px 1fr 26px; align-items: center; gap: 8px; background: #fffdf8; border: 1px solid #e4dccd;
+            border-radius: 14px; padding: 12px 10px; margin-bottom: 9px; font-size: 14px; }
+  .m-item b { font: 400 26px/1 var(--serif); color: #c2531c; text-align: center; }
+  .m-item i { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #e4dccd; }
+  .m-item.d { background: transparent; } .m-item.d span { color: #6f665b; text-decoration: line-through; }
+  .m-item.d b { color: #3f6b4f; } .m-item.d i { background: #3f6b4f; border-color: #3f6b4f; }
+  .m-write { background: #fffdf8; border: 1px solid #c2531c; border-radius: 14px; padding: 10px 10px 8px; font-size: 13px; color: #6f665b; }
+  .m-write span { display: flex; gap: 4px; margin-top: 18px; }
+  .m-write i { font-style: normal; flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: #1f1b16; border: 1px solid #e4dccd; border-radius: 8px; padding: 5px 0; background: #f6f1e7; }
+  .m-write i.p { background: #1f1b16; color: #f6f1e7; border-color: #1f1b16; }
+  .m-dusk { margin-top: auto; background: #17151f; color: #f1ece2; border-radius: 14px; padding: 12px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+  .m-dusk span:last-child { background: #f3c873; color: #17151f; border-radius: 999px; padding: 4px 10px; font-weight: 600; }
+
+  section.band { padding: 72px 0; border-top: 1px solid var(--line); }
+  .kicker { font: 600 13px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+  h2.big { font: 400 clamp(30px, 4.5vw, 46px)/1.1 var(--serif); margin: 0 0 18px; letter-spacing: -.01em; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  .step b { font: 400 44px/1 var(--serif); color: var(--accent); display: block; margin-bottom: 12px; }
+  .step h3 { font: 600 19px var(--serif); margin: 0 0 6px; }
+  .step p { margin: 0; color: var(--muted); }
+
+  .story { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
+  .story blockquote { margin: 0; font: italic 400 clamp(22px, 3vw, 30px)/1.35 var(--serif); }
+  .story p { color: var(--muted); font-size: 17px; }
+
+  .dusk { background: radial-gradient(120% 90% at 50% 0%, #2a2440, #17151f 65%); color: #f1ece2; border-radius: 28px; padding: 56px 32px; text-align: center; margin: 72px 0; }
+  .dusk h2 { font: 400 clamp(28px, 4vw, 42px)/1.15 var(--serif); margin: 0 0 12px; }
+  .dusk p { color: #a49cae; max-width: 34em; margin: 0 auto 26px; }
+  .dusk .btn { background: #f3c873; border-color: #f3c873; color: #17151f; }
+  .dusk .btn.ghost { background: transparent; color: #f1ece2; border-color: #4a4462; }
+
+  .feats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 40px; margin-top: 26px; }
+  .feats div { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .feats b { display: block; font-weight: 600; }
+  .feats span { color: var(--muted); }
+
+  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 820px) {
+    .hero, .story { grid-template-columns: 1fr; gap: 36px; }
+    .hero { padding-top: 24px; }
+    .phone { width: min(270px, 80%); }
+    .steps, .feats { grid-template-columns: 1fr; }
+    .dusk { padding: 40px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="nav">
+    <a class="brand" href="./"><img src="icons/icon-192.png" alt="">Only Three</a>
+    <a class="btn ghost" href="app.html" style="min-height:40px;padding:0 16px">Open the app</a>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1><span style="white-space:nowrap">Twenty things to do.</span><br><em>Three</em> that matter.</h1>
+      <p>Only Three is a tiny planner with one rule. Write everything down, then pick only three to do now. The rest waits on your list, out of the way.</p>
+      <div class="ctas">
+        <a class="btn accent" href="app.html">Try it free</a>
+        <a class="btn ghost" data-waitlist href="#">Get the phone app</a>
+      </div>
+      <div class="tiny">No sign-up. Works in your browser and offline. Your list never leaves your device.</div>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="screen">
+        <h4>Wednesday</h4><div class="s">October 28</div>
+        <div class="m-write">What's on your mind?<span><i>Save thought</i><i>Add to tasks</i><i class="p">Do now</i></span></div>
+        <div class="s" style="margin:12px 2px 8px;font-weight:600;letter-spacing:.08em">NOW · 1 OF 3 DONE</div>
+        <div class="m-item d"><b>1</b><span>Finish the essay intro</span><i></i></div>
+        <div class="m-item"><b>2</b><span>Call the dentist</span><i></i></div>
+        <div class="m-item"><b>3</b><span>30 minutes of practice</span><i></i></div>
+        <div class="s" style="margin:6px 2px 0">14 more in Tasks</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="band">
+    <p class="kicker">How it works</p>
+    <h2 class="big">Open it. Write. Do three things.</h2>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Write it down</h3><p>The moment you open it, there's a box ready. Save it as a thought or add it as a task.</p></div>
+      <div class="step"><b>2</b><h3>Keep one list</h3><p>Every task lives in one place. Tick it off, delete it, or leave it for later.</p></div>
+      <div class="step"><b>3</b><h3>Pick three for now</h3><p>Move up to three tasks to Now. That's all you look at until they're done.</p></div>
+    </div>
+  </section>
+
+  <section class="band story">
+    <div>
+      <p class="kicker">An old idea</p>
+      <blockquote>“Write down the most important things for tomorrow. Do the first one until it's done.”</blockquote>
+    </div>
+    <div>
+      <p>As the story goes, in 1918 the steel magnate Charles Schwab asked a consultant named Ivy Lee how to get more done. Lee's advice took five minutes: each evening, write down the most important tasks for the next day, in order, and work through them one at a time.</p>
+      <p>Schwab tried it for three months, then reportedly sent Lee a check for $25,000.</p>
+      <p>Lee's list had six items. We use three, because most of us are lucky to finish six, and a list you finish beats a list you abandon.</p>
+    </div>
+  </section>
+
+  <div class="dusk">
+    <h2>Everything written down. Three things at a time.</h2>
+    <p>Add it to your home screen and it opens like an app, instantly, even offline.</p>
+    <div class="ctas" style="justify-content:center"><a class="btn" href="app.html?write=1">Start writing</a><a class="btn ghost" data-waitlist href="#">Get the phone app</a></div>
+  </div>
+
+  <section class="band" style="border-top:0;padding-top:0">
+    <p class="kicker">What's inside</p>
+    <h2 class="big">Small on purpose.</h2>
+    <div class="feats">
+      <div><b>A place for thoughts</b><span>Ideas and notes get their own list, and any of them can become a task.</span></div>
+      <div><b>Now shows only three</b><span>No endless list staring back at you.</span></div>
+      <div><b>Streaks</b><span>For days you finish something that mattered, not for opening the app.</span></div>
+      <div><b>Your week, in one picture</b><span>A card of your week you can save or share.</span></div>
+      <div><b>Nightly reminder</b><span>Adds a repeating event to your own calendar.</span></div>
+      <div><b>Private by design</b><span>No account and no tracking. Your list stays on your device.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Only Three · free while in early access · made by Northfield</span>
+    <span><a data-contact href="#">Contact</a> · <a href="app.html">Open the app</a></span>
+  </footer>
+</div>
+<script src="config.js"></script>
+<script>
+  (function () {
+    var C = window.ONLY_THREE || {};
+    var wl = C.waitlistUrl || "mailto:" + C.contactEmail + "?subject=" + encodeURIComponent("Only Three phone app waitlist") +
+      "&body=" + encodeURIComponent("Please tell me when the phone app is out.");
+    document.querySelectorAll("[data-waitlist]").forEach(function (a) { a.href = wl; if (C.waitlistUrl) { a.target = "_blank"; a.rel = "noopener"; } });
+    document.querySelectorAll("[data-contact]").forEach(function (a) { a.href = "mailto:" + C.contactEmail; });
+    if (C.goatcounter) { var s = document.createElement("script"); s.async = true; s.src = "//gc.zgo.at/count.js";
+      s.dataset.goatcounter = "https://" + C.goatcounter + ".goatcounter.com/count"; document.body.appendChild(s); }
+  })();
+</script>
+</body>
+</html>
